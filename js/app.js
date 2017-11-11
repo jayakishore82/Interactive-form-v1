@@ -23,9 +23,13 @@ name.focus();
 */
 otherTitle.style.display = "none";
 title.addEventListener('change', (e)=> {
-    if (e.target.value === 'other') {
-    otherTitle.style.display = "";
+  if (e.target.value === 'other') {
+      otherTitle.style.display = "";
   }
+  else {
+      otherTitle.style.display = "none";
+  }
+
 });
 
 /* Hide the colour label and select menu until a T-Shirt design is selected from
@@ -134,6 +138,7 @@ activities.addEventListener('change', (e)=>{
 //Hide paypal and bitcoin options
 paypal.style.display = 'none';
 bitcoin.style.display = 'none';
+payment.selectedIndex = 1;
 
 /*Event listener for payment section. Displays payment sections based on the payment
 options.
