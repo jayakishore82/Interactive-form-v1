@@ -13,6 +13,7 @@ const form = document.querySelector('form');
 const firstSection = document.getElementById("first-section");
 const ccnum = document.getElementById("cc-num");
 const ccnumField = document.getElementById("ccnum-field");
+let creditCardSelected = true;
 let ccnumber = '';
 let total = 0;
 //Set focus on first text field
@@ -138,19 +139,22 @@ bitcoin.style.display = 'none';
 options.
 */
 payment.addEventListener('change', (e)=> {
-  
+
   const paymentMethod = e.target.value;
   paypal.style.display = 'none';
   bitcoin.style.display = 'none';
   creditCard.style.display = 'none';
   if (paymentMethod === 'credit card' || paymentMethod === 'select_method') {
     creditCard.style.display = '';
+    creditCardSelected = true;
   }
   else if (paymentMethod === 'paypal') {
     paypal.style.display = '';
+    creditCardSelected = false;
   }
   else {
     bitcoin.style.display = '';
+    creditCardSelected = false;
   }
 
 });
@@ -346,7 +350,9 @@ form.addEventListener('submit', (e)=> {
   validateName();
   validateMail();
   validateActivity()
-  validateCard();
+  if (creditCardSelected) {
+      validateCard();
+  }
 
 
   if(!errorFound) {
