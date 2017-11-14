@@ -14,6 +14,7 @@ const firstSection = document.getElementById("first-section");
 const ccnum = document.getElementById("cc-num");
 const ccnumField = document.getElementById("ccnum-field");
 let creditCardSelected = true;
+let paymentSelected = true;
 let ccnumber = '';
 let total = 0;
 //Set focus on first text field
@@ -145,11 +146,16 @@ options.
 */
 payment.addEventListener('change', (e)=> {
 
+  paymentSelected = true;
   const paymentMethod = e.target.value;
   paypal.style.display = 'none';
   bitcoin.style.display = 'none';
   creditCard.style.display = 'none';
-  if (paymentMethod === 'credit card' || paymentMethod === 'select_method') {
+  if (paymentMethod === 'select_method') {
+    paymentSelected = false;
+    creditCardSelected = false;
+  }
+  else if (paymentMethod === 'credit card')   {
     creditCard.style.display = '';
     creditCardSelected = true;
   }
@@ -161,6 +167,10 @@ payment.addEventListener('change', (e)=> {
     bitcoin.style.display = '';
     creditCardSelected = false;
   }
+  if (paymentSelected) {
+      removeError('.payment-error');
+  }
+
 
 });
 
@@ -215,6 +225,8 @@ form.addEventListener('submit', (e)=> {
   const zipField = document.getElementById('zip-field');
   const cvv = document.getElementById('cvv');
   const label = activities.querySelector('label');
+  const paySection = document.getElementById("pay-section");
+  const payLabel = paySection.querySelector('label');
   let activitySelected = false;
   let zipError = '';
   let cvvError = '';
@@ -291,6 +303,19 @@ form.addEventListener('submit', (e)=> {
 
   }
 
+  /*Validate payment: Function to check whether any payment option os selected
+  */
+  function validatePayment() {
+    removeError('.payment-error');
+
+    if (!paymentSelected) {
+      errorMsg = "Please select a payment method";
+      displayError("payment-error",paySection,payLabel);
+
+    }
+
+  }
+
   /*Function to validate the ZIP and CVV input
   */
   function validateNum(number,length,field) {
@@ -319,7 +344,6 @@ form.addEventListener('submit', (e)=> {
      removeError('.card-error');
 
      zip.style.borderColor ='';
-     ccnum.style.borderColor ='';
      cvv.style.borderColor ='';
 
     //Validate credit card number: check whether the card number is entered.
@@ -354,7 +378,8 @@ form.addEventListener('submit', (e)=> {
 
   validateName();
   validateMail();
-  validateActivity()
+  validateActivity();
+  validatePayment();
   if (creditCardSelected) {
       validateCard();
   }
